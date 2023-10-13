@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from department.models import Course, Classroom, AcademicProgram
+from department.models import Course, Classroom
 from staff.models import Staff
 
 
@@ -126,22 +126,5 @@ class Leave(models.Model):
         ('D', 'Denied')
     ])
 
-
-class ClassSchedule(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    academic_program = models.ForeignKey(
-        AcademicProgram, on_delete=models.CASCADE)
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    class_room = models.ForeignKey(Classroom, on_delete=models.CASCADE)
-    day = models.CharField("Day", max_length=10, choices=[
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday')
-    ])
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    def __str__(self):
-        return f"{self.course} - {self.day} - {self.start_time} to {self.end_time}"
+    def __str__(self) -> str:
+        return f"{self.student_leave.user_name}"

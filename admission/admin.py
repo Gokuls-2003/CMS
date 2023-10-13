@@ -1,4 +1,7 @@
+from collections import OrderedDict
+from typing import Any
 from django.contrib import admin
+from django.http.request import HttpRequest
 from .import models
 from django.contrib.auth.models import User
 from student.models import Student, StudentDocuments
@@ -53,6 +56,12 @@ class ApplicantDocumentInline(admin.TabularInline):
 class ApplicantAdmin(admin.ModelAdmin):
     list_filter = ["approved", TenthMarkFilter, TwelvethMarkFilter]
     list_display = ["name", "approved", "tenth_mark", "twelveth_mark"]
-    actions = [approve_applicant]
     readonly_fields = ["approved"]
     inlines = [ApplicantDocumentInline]
+
+    def get_actions(self, request: HttpRequest) -> OrderedDict[Any, Any]:
+        actions = super().get_actions(request)
+        if request.user.is_superuser:
+            actions['approve_applicant'] = (
+                approve_applicant, 'approve_applicant', 'Approve selected applicants')
+        return actions

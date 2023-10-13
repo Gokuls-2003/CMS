@@ -4,23 +4,12 @@ from department.models import Course, AcademicProgram, Classroom
 # Create your models here.
 
 
-class Role(models.Model):
-    name = models.CharField("Role", max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class TeachingType(models.Model):
-    teaching_Type = models.CharField("Teaching Type", max_length=20)
-
-
 class Staff(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name='staff')
     department = models.ForeignKey(
         'department.Department', on_delete=models.CASCADE)
-    teaching_type = models.CharField("TeachingType", max_length=3, default=None, choices=[
+    teaching_type = models.CharField("Teaching Type", max_length=3, default=None, choices=[
         ('HOD', 'Hod'),
         ('P', 'Professor'),
         ('AP', 'Assistant Professor'),
@@ -29,7 +18,15 @@ class Staff(models.Model):
     # qualifications = models.CharField('Qualifications', max_length= 50, null = True, blank=True)
     contact_information = models.CharField(
         'Contact Number', max_length=15,  null=True, blank=True)
-    roles = models.ManyToManyField(Role)
+    date_of_birth = models.DateField()
+    gender = models.CharField(max_length=10, choices=[(
+        'Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
+    marital_status = models.CharField(max_length=10, choices=[(
+        'Married', 'Married'), ('Un Married', 'Un Married')])
+    nationality = models.CharField(max_length=50)
+    religion = models.CharField(max_length=50)
+    address = models.TextField()
+    # roles = models.ManyToManyField(Role)
 
     def __str__(self):
         return self.user.first_name
@@ -49,6 +46,9 @@ class Training(models.Model):
 
     ])
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class PerfromanceEvulation(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
@@ -56,9 +56,15 @@ class PerfromanceEvulation(models.Model):
     assessments = models.TextField('Assessments', max_length=100)
     feedback = models.TextField("Feedback", max_length=200)
 
+    def __str__(self):
+        return self.staff.__str__()
+
 
 class Degree(models.Model):
     degree_name = models.CharField('Degree', max_length=5, default=None)
+
+    def __str__(self):
+        return self.degree_name
 
 
 class Qualification(models.Model):
@@ -68,6 +74,9 @@ class Qualification(models.Model):
     instituition = models.CharField('Instituition', max_length=150)
     year_passing = models.CharField(
         'Year Passing', max_length=9, help_text="eg: 2020-2024")
+
+    def __str__(self):
+        return self.staff.__str__()
 
 
 class Leave(models.Model):
@@ -80,6 +89,9 @@ class Leave(models.Model):
         ('A', 'Approved'),
         ('D', 'Denied')
     ])
+
+    def __str__(self) -> str:
+        return self.staff.__str__()
 
 
 class EmergencyContact(models.Model):

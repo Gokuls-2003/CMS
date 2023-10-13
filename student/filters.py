@@ -12,6 +12,8 @@ class PaidStatus(admin.SimpleListFilter):
     parameter_name = "paid"
 
     def lookups(self, request: Any, model_admin: Any) -> list[tuple[Any, str]]:
+        if hasattr(request.user, "student"):
+            return []
         return [
             ('paid', 'paid'),
             ('unpaid', 'unpaid')

@@ -21,6 +21,15 @@ class SalaryAdmin(admin.ModelAdmin):
     list_display = ["staff", "generated_at", "basic_salary",
                     "allowances", "deductions", "final_salary"]
 
+    def get_queryset(self, request: HttpRequest):
+        queryset = super().get_queryset(request)
+
+        # Check if the user is a student
+        if hasattr(request.user, "staff"):
+            queryset = queryset.filter(staff=request.user.staff)
+
+        return queryset
+
     def get_exclude(self, request: HttpRequest, obj: Any | None = ...) -> Any:
         if obj is None:
             return ["allowances", "deductions", "final_salary"]
@@ -46,6 +55,3 @@ class SalaryAdmin(admin.ModelAdmin):
             obj.final_salary = obj.basic_salary+obj.allowances - obj.deductions
             obj.save()
         return super().save_formset(request, form, formset, change)
-
-
-admin.site.register(models.Payslip)

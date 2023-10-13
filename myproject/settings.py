@@ -88,6 +88,10 @@ DATABASES = {
     }
 }
 
+JAZZMIN_SETTINGS = {
+    "welcom_sign": "CMS PROJECT",
+    "copyright": "<a href='mailto:gokulsenthil899@gmail.com'>gokulsenthil899@gmail.com</a>"
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

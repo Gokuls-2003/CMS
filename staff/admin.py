@@ -20,7 +20,7 @@ class EmergencyContactInline(admin.TabularInline):
 @admin.register(models.Staff)
 class StaffAdmin(admin.ModelAdmin):
     inlines = [EmergencyContactInline]
-    fields = ['user', 'contact_information', 'department', 'teaching_type',
+    fields = ['profile_picture', 'user', 'contact_number', 'experience', 'department', 'teaching_type',
               'date_of_birth', 'gender', 'marital_status', 'nationality', 'religion', 'address']
 
     def get_readonly_fields(self, request, obj):

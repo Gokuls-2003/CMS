@@ -5,18 +5,21 @@ from department.models import Course, AcademicProgram, Classroom
 
 
 class Staff(models.Model):
+    profile_picture = models.ImageField(
+        upload_to='profile_pics/', null=True, blank=True)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name='staff')
     department = models.ForeignKey(
-        'department.Department', on_delete=models.CASCADE)
+        'department.Department', on_delete=models.CASCADE, blank=True, null=True)
     teaching_type = models.CharField("Teaching Type", max_length=3, default=None, choices=[
         ('HOD', 'Hod'),
         ('P', 'Professor'),
         ('AP', 'Assistant Professor'),
         ('LS', 'Lab Staff')
     ])
-    # qualifications = models.CharField('Qualifications', max_length= 50, null = True, blank=True)
-    contact_information = models.CharField(
+    # qualifications = models.CharField('Qualifications', max_length=50, null=True, blank=True)
+    experience = models.CharField("Experience", max_length=10)
+    contact_number = models.CharField(
         'Contact Number', max_length=15,  null=True, blank=True)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10, choices=[(

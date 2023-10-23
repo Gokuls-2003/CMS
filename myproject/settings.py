@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'department',
     'accounts',
     'payroll',
-    'admission'
+    'admission',
+    'recruitment'
 
 ]
 

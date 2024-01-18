@@ -20,7 +20,7 @@ class EmergencyContactInline(admin.TabularInline):
 @admin.register(models.Staff)
 class StaffAdmin(admin.ModelAdmin):
     inlines = [EmergencyContactInline]
-    fields = ['profile_picture', 'user', 'contact_number', 'experience', 'department', 'teaching_type',
+    fields = ['profile_picture', 'user', 'contact_number', 'experience', 'department', 'teaching_type', 'qualifications',
               'date_of_birth', 'gender', 'marital_status', 'nationality', 'religion', 'address']
 
     def get_readonly_fields(self, request, obj):
@@ -60,7 +60,7 @@ class Leave(admin.ModelAdmin):
     #     return ['staff', 'start_date', 'end_date', 'reason']
 
     def get_readonly_fields(self, request: HttpRequest, obj: Any) -> list[str]:
-        if request.user.is_superuser or (hasattr(request.user, "staff") and request.user.staff.teaching_type == "HOD"):
+        if request.user.is_superuser or request.user.staff.teaching_type == "HOD":
             if obj.leave_status != "P":
                 return ['staff', 'start_date', 'end_date', 'reason', 'leave_status']
             return ['staff', 'start_date', 'end_date', 'reason']

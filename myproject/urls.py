@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .import views
 
 admin.site.site_header = "CMS"
 
@@ -30,6 +31,7 @@ urlpatterns = static(
 ) + [
     path('admin/', admin.site.urls),
     path("admission/", include("admission.urls")),
-    path("recruitment/", include("recruitment.urls"))
+    path("recruitment/", include("recruitment.urls")),
+    path("", views.index)
 
 ]

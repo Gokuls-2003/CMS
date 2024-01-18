@@ -9,6 +9,8 @@ class Staff(models.Model):
         upload_to='profile_pics/', null=True, blank=True)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name='staff')
+    email_id = models.EmailField(
+        "Email Id", max_length=100, blank=True, null=True)
     department = models.ForeignKey(
         'department.Department', on_delete=models.CASCADE, blank=True, null=True)
     teaching_type = models.CharField("Teaching Type", max_length=3, default=None, choices=[
@@ -17,7 +19,8 @@ class Staff(models.Model):
         ('AP', 'Assistant Professor'),
         ('LS', 'Lab Staff')
     ])
-    # qualifications = models.CharField('Qualifications', max_length=50, null=True, blank=True)
+    qualifications = models.CharField(
+        'Qualifications', max_length=50, null=True, blank=True)
     experience = models.CharField("Experience", max_length=10)
     contact_number = models.CharField(
         'Contact Number', max_length=15,  null=True, blank=True)

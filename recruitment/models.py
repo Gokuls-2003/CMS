@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from department.models import Course, AcademicProgram, Classroom, Department
+from department.models import Department
+from staff.models import Staff
 
 # Create your models here.
 
@@ -15,7 +16,7 @@ class Applicant(models.Model):
     experience = models.CharField("Experience", max_length=10)
     qualification = models.CharField(
         "Qualification", max_length=15, blank=True, null=True)
-    teaching_type = models.CharField("Teaching Type", max_length=3, default=None, choices=[
+    teaching_type = models.CharField("Teaching Type", max_length=3, blank=True, null=True, choices=[
         ('HOD', 'Hod'),
         ('P', 'Professor'),
         ('AP', 'Assistant Professor'),

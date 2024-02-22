@@ -45,7 +45,6 @@ approve_applicant.short_description = "Approve Applications"
 class ApplicantAdmin(admin.ModelAdmin):
     list_filter = ['approved']
     list_display = ["name", "approved"]
-    readonly_fields = ["approved"]
 
     def get_actions(self, request: HttpRequest) -> OrderedDict[Any, Any]:
         actions = super().get_actions(request)
@@ -53,3 +52,10 @@ class ApplicantAdmin(admin.ModelAdmin):
             actions['approve_applicant'] = (
                 approve_applicant, 'approve_applicant', 'Approve selected applicants')
         return actions
+
+    def get_readonly_fields(self, request, obj):
+        if obj.approved == True:
+            return []
+        return ['name', 'email_id', 'profile_picture', 'date_of_birth',
+                'address', 'experience', 'teaching_type', 'qualification', 'department', 'contact_number',
+                'gender', 'nationality', 'religion', 'marital_status']

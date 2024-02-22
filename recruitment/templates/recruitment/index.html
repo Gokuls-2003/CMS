@@ -55,6 +55,13 @@
         button:hover {
             background-color: #45a049;
         }
+
+        .error input{
+            border: 1px solid red;
+          }
+          .error-msg{
+            color: red;
+          }
     </style>
 </head>
 <body>
@@ -67,60 +74,24 @@
         {% endfor %}
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form id="myForm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <label for="profile_picture">Profile Picture:</label>
-        <input type="file" name="profile_picture">
-
-        <label for="name"> Name:</label>
-        <input type="text" name="name" required>
-
-        <label for="email_id">Email Id:</label>
-        <input type="email" name="email_id" required>
-
-        <label for="date_of_birth">Date of Birth:</label>
-        <input type="date" name="date_of_birth" required>
-
-        <label for="address">Address:</label>
-        <textarea name="address" required></textarea>
-
-        <label for="experience">Experience:</label>
-        <input type="text" name="experience" required>
+        {% for field in form %}
+        <p class="{% if field.errors %}error{% endif %}">
+            {{ field.label_tag }}
+            {{ field }}
+            <br>
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <span class="error-msg">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </p>
+    {% endfor %}
         
-        <label for="Qualifications">Qualifications:</label>
-        <input type="text" name="Qualifications" required>
-
-        <label for="contact_number">Contact Number:</label>
-        <input type="tel" name="contact_number" required>
-
-        <label for="Emergency contact_name">Emergency Conact Name:</label>
-        <input type="text" name="Emergency contact_name" required>
-
-        <label for="Emergency contact_number"> Emergency Contact Number:</label>
-        <input type="tel" name="Emergency contact_number" required>
-
-        <label for="gender">Gender:</label>
-        <select name="gender" required>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-
-        <label for="marital_status">Marital Status:</label>
-        <select name="marital_status" required>
-            <option value="Married">Married</option>
-            <option value="Un Married">Un Married</option>
-        </select>
-
-        <label for="nationality">Nationality:</label>
-        <input type="text" name="nationality" required>
-
-        <label for="religion">Religion:</label>
-        <input type="text" name="religion" required>
 
         <button type="submit">Submit</button>
     </form>
-
+   
 </body>
 </html>

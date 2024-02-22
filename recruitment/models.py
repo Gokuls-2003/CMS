@@ -13,7 +13,7 @@ class Applicant(models.Model):
     email_id = models.EmailField("Email Id", max_length=100)
     date_of_birth = models.DateField()
     address = models.TextField()
-    experience = models.CharField("Experience", max_length=10)
+    experience = models.IntegerField("Experience", max_length=10)
     qualification = models.CharField(
         "Qualification", max_length=15, blank=True, null=True)
     teaching_type = models.CharField("Teaching Type", max_length=3, blank=True, null=True, choices=[

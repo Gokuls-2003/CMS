@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from department.models import Course, Classroom
 from staff.models import Staff
+from django.core.exceptions import ValidationError
 
 
 class Student(models.Model):
@@ -25,6 +26,10 @@ class Student(models.Model):
         if self.user_name is None:
             return super().__str__()
         return self.user_name.username
+
+    def clean(self):
+        if not self.emergency_contact_name.replace(' ', '').isalpha():
+            raise ValidationError("Name can only contain letters and spaces.")
 
 
 class StudentDocuments(models.Model):

@@ -12,8 +12,10 @@ import datetime
 class MyForm(forms.ModelForm):
     class Meta:
         model = Applicant
-        fields = ("profile_picture", 'name', 'experience',
-                  "email_id", "date_of_birth", 'address', 'contact_number', 'qualification', 'teaching_type', 'gender', 'marital_status', 'nationality', 'religion', 'department')
+        fields = ("profile_picture", 'name',
+                  "email_id", "date_of_birth", 'address', 'contact_number',
+                  'tenth_mark', 'twelveth_mark', 'gender',  'nationality', 'religion', 'emergency_contact_name',
+                  'emergency_contact_number', )
         widgets = {
             'date_of_birth': forms.DateInput(format='%d/%m/%Y', attrs={'placeholder': 'DD/MM/YYYY'}),
         }
@@ -36,15 +38,6 @@ class MyForm(forms.ModelForm):
         #         "Name cannot have 5 consecutive characters.")
 
         return name
-
-    def clean_experience(self):
-        experience = self.cleaned_data['experience']
-        if experience < 2:
-            raise forms.ValidationError("Unakku vayasu pathala poo daa")
-        if experience > 5:
-            raise forms.ValidationError(
-                "Unakku romba vayasu aagiruchu poo daa")
-        return experience
 
     def clean_email_id(self):
         email_id = self.cleaned_data.get('email_id')
@@ -129,38 +122,19 @@ class MyForm(forms.ModelForm):
 
         return contact_number
 
-    def clean_qualification(self):
-        qualification = self.cleaned_data.get('qualification')
+    def clean_tenth_mark(self):
+        tenth_mark = self.cleaned_data.get('tenth_mark')
+        if tenth_mark:
+            if tenth_mark > 500:
+                raise ValidationError("Your Tenth Mark Must Not Exceed 500")
+        return tenth_mark
 
-        if qualification:
-            # Check if the qualifications contain only characters, commas, and periods
-            if not qualification.replace(' ', '').replace(',', '').replace('.', '').isalpha():
-                raise ValidationError(
-                    "Qualifications can only contain letters, commas, and periods.")
-
-            # Check if the qualifications contain any numerical values
-            if any(char.isdigit() for char in qualification):
-                raise ValidationError(
-                    "Qualifications cannot contain numerical values.")
-
-            # Check if the qualifications contain no more than 15 characters
-            if len(qualification) > 15:
-                raise ValidationError(
-                    "Qualifications cannot be longer than 15 characters.")
-
-            # Check if the qualifications contain 5 consecutive characters
-            # if any(qualification[i:i+5].isalpha() for i in range(len(qualification) - 4)):
-            #     raise ValidationError(
-            #         "Qualifications cannot have 5 consecutive characters.")
-
-        return qualification
-
-    def clean_teaching_type(self):
-        teaching_type = self.cleaned_data.get('teaching_type')
-        if not teaching_type:
-            raise forms.ValidationError(
-                "Teaching Type must be selected.")
-        return teaching_type
+    def clean_twelveth_mark(self):
+        twelveth_mark = self.cleaned_data.get('tenth_mark')
+        if twelveth_mark:
+            if twelveth_mark > 600:
+                raise ValidationError("Your Tenth Mark Must Not Exceed 600")
+        return twelveth_mark
 
     def clean_gender(self):
         gender = self.cleaned_data.get('gender')
@@ -171,13 +145,6 @@ class MyForm(forms.ModelForm):
         # else:
         #     raise forms.ValidationError(
         #         "Gender must be selected.")
-
-    def clean_marital_status(self):
-        marital_status = self.cleaned_data.get('marital_status')
-        if not marital_status:
-            raise forms.ValidationError(
-                "Marital Status must be selected.")
-        return marital_status
 
     def clean_nationality(self):
         nationality = self.cleaned_data.get("nationality")
@@ -211,8 +178,35 @@ class MyForm(forms.ModelForm):
 
         return religion
 
-    def clean_department(self):
-        department = self.cleaned_data.get("department")
-        if not department:
-            raise ValidationError("Department is required.")
-        return department
+    def clean_emergency_contact_name(self):
+        emergency_contact_name = self.cleaned_data['emergency_contact_name']
+
+        if not emergency_contact_name:
+            raise ValidationError("Emergency Name is required.")
+
+        if not emergency_contact_name.replace(' ', '').isalpha():
+            raise forms.ValidationError(
+                " Emergency Name can only contain letters and spaces.")
+
+        # # Check for 5 consecutive characters
+        # if any(name[i:i+5].isalpha() for i in range(len(name) - 4)):
+        #     raise forms.ValidationError(
+        #         "Name cannot have 5 consecutive characters.")
+
+        return emergency_contact_name
+
+    def clean_emergency_contact_number(self):
+        emergency_contact_number = self.cleaned_data.get(
+            'emergency_contact_number')
+        if emergency_contact_number:
+            # Check if the number has exactly 10 digits
+            if len(emergency_contact_number) != 10:
+                raise ValidationError(
+                    "emergency_contact_number must have exactly 10 digits.")
+
+            # Check if the number is an Indian phone number
+            if not re.match(r'^[6-9]\d{9}$', emergency_contact_number):
+                raise ValidationError(
+                    "emergency_contact_number must be an Indian phone number.")
+
+        return emergency_contact_number

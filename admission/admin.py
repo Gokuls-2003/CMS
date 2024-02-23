@@ -6,6 +6,7 @@ from .import models
 from django.contrib.auth.models import User
 from student.models import Student, StudentDocuments
 from .filters import TenthMarkFilter, TwelvethMarkFilter
+from .import forms
 # Register your models here.
 
 
@@ -55,9 +56,15 @@ class ApplicantDocumentInline(admin.TabularInline):
 @admin.register(models.Applicant)
 class ApplicantAdmin(admin.ModelAdmin):
     list_filter = ["approved", TenthMarkFilter, TwelvethMarkFilter]
-    list_display = ["name", "approved", "tenth_mark", "twelveth_mark"]
+    list_display = ["name", "approved",
+                    "tenth_mark", "twelveth_mark", 'email_id']
     readonly_fields = ["approved"]
     inlines = [ApplicantDocumentInline]
+    readonly_fields = ["profile_picture", 'name', "email_id", "date_of_birth", 'address',
+                       'contact_number', 'tenth_mark', 'twelveth_mark', 'gender',  'nationality', 'religion',
+                       'emergency_contact_name', 'emergency_contact_number']
+
+    form = forms.MyForm
 
     def get_actions(self, request: HttpRequest) -> OrderedDict[Any, Any]:
         actions = super().get_actions(request)

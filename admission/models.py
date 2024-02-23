@@ -9,7 +9,7 @@ class Applicant(models.Model):
     profile_picture = models.ImageField(
         upload_to='profile_pics/', null=True, blank=True)
     name = models.CharField("Student Name", max_length=50)
-    email_id = models.EmailField("Email Id", max_length=100)
+    email_id = models.EmailField("Email Id", unique=True, max_length=100)
     date_of_birth = models.DateField()
     address = models.TextField()
     tenth_mark = models.IntegerField('10th', validators=[
@@ -23,7 +23,7 @@ class Applicant(models.Model):
     contact_number = models.CharField(max_length=15)
     emergency_contact_name = models.CharField(max_length=30)
     emergency_contact_number = models.CharField(max_length=15)
-    gender = models.CharField(max_length=10, choices=[(
+    gender = models.CharField(max_length=10, blank=True, null=True, choices=[(
         'Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
     nationality = models.CharField(max_length=50)
     religion = models.CharField(max_length=50)

@@ -102,6 +102,8 @@ class ClassScheduleAdmin(admin.ModelAdmin):
 @admin.register(models.Training)
 class TrainingAdmin(admin.ModelAdmin):
 
+    form = forms.TrainingForm
+
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         queryset = super().get_queryset(request)
 

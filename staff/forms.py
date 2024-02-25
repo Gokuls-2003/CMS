@@ -1,10 +1,11 @@
-from .models import Staff
+from .models import Staff, Training
 from django import forms
 from django.core.exceptions import ValidationError
 from email_validator import validate_email, EmailNotValidError
 from django.core.files.images import get_image_dimensions
 from department.models import Department
 from PIL import Image
+from datetime import date, timedelta
 import re
 import datetime
 
@@ -12,7 +13,7 @@ import datetime
 class MyForm(forms.ModelForm):
 
     class Meta:
-        fields = ("profile_picture", 'name', 'experience',
+        fields = ("profile_picture", 'name',
                   "email_id", "date_of_birth", 'address', 'contact_number', 'qualification', 'teaching_type', 'gender', 'marital_status', 'nationality', 'religion', 'department')
     widgets = {
         'date_of_birth': forms.DateInput(format='%d/%m/%Y', attrs={'placeholder': 'DD/MM/YYYY'}),
@@ -216,3 +217,49 @@ class MyForm(forms.ModelForm):
         if not department:
             raise ValidationError("Department is required.")
         return department
+
+
+class TrainingForm(forms.ModelForm):
+
+    class Meta:
+        model = Training
+        fields = ('name', 'staff', 'start_date', 'end_date', 'description')
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+
+        if not name:
+            raise ValidationError("Name is required.")
+
+        if not name.replace(' ', '').isalpha():
+            raise forms.ValidationError(
+                "Name can only contain letters and spaces.")
+
+        # # Check for 5 consecutive characters
+        # if any(name[i:i+5].isalpha() for i in range(len(name) - 4)):
+        #     raise forms.ValidationError(
+        #         "Name cannot have 5 consecutive characters.")
+
+        return name
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+
+        # Split the address into words
+        words = description.split()
+
+        # Check the number of words
+        if len(words) > 100:
+            raise ValidationError(
+                "description cannot have more than 100 words.")
+
+        # Check if there is any 10 consecutive characters in the address
+        for word in words:
+            if len(word) >= 10:
+                raise ValidationError(
+                    "description cannot have 10 consecutive characters.")
+
+        if not description:
+            raise ValidationError("Address is required.")
+
+        return description

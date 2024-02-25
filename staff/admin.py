@@ -4,6 +4,7 @@ from django.http.request import HttpRequest
 from . import models
 from .filters import ClassRoomFilter, DayFilter
 from django.db.models.query import QuerySet
+from .import forms
 # Register your models here.
 
 
@@ -22,6 +23,8 @@ class StaffAdmin(admin.ModelAdmin):
     inlines = [EmergencyContactInline]
     fields = ['profile_picture', 'user', 'contact_number', 'experience', 'department', 'teaching_type', 'qualifications',
               'date_of_birth', 'gender', 'marital_status', 'nationality', 'religion', 'address']
+
+    form = forms.MyForm
 
     def get_readonly_fields(self, request, obj):
         if obj is None:  # creating

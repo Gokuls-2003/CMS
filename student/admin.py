@@ -4,6 +4,7 @@ from django.http.request import HttpRequest
 from . import models
 from django.db.models import F, ExpressionWrapper, fields, Sum, Value
 from .filters import PaidStatus
+from .import forms
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.db.models.functions import Coalesce
@@ -98,6 +99,9 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(models.AcademicRecords)
 class AcademicRecordsAdmin(admin.ModelAdmin):
+
+    form = forms.AcademicRecords
+
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         queryset = super().get_queryset(request)
 
@@ -109,7 +113,10 @@ class AcademicRecordsAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Perfromance)
-class PeroformanceAdmin(admin.ModelAdmin):
+class PerformanceAdmin(admin.ModelAdmin):
+
+    form = forms.PerfromanceForm
+
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         queryset = super().get_queryset(request)
 

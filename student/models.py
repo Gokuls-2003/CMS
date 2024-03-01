@@ -61,7 +61,15 @@ class AcademicRecords(models.Model):
         Classroom, on_delete=models.CASCADE, null=True, blank=True
     )
     marks = models.DecimalField('Marks', max_digits=5, decimal_places=2)
-    grade = models.CharField('Grade',  max_length=5)
+    grade = models.CharField('Grade',  max_length=5, choices=[
+        ('o', 'o'),
+        ('A+', 'A+'),
+        ('A', 'A'),
+        ('B+', 'B+'),
+        ('B', 'B'),
+
+
+    ])
     teacher_comments = models.TextField(
         "Teacher Comments", null=True, blank=True)
     year = models.CharField("year", max_length=4)

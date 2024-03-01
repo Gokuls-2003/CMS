@@ -24,7 +24,7 @@ class StaffAdmin(admin.ModelAdmin):
     fields = ['profile_picture', 'user', 'contact_number', 'experience', 'department', 'teaching_type', 'qualifications',
               'date_of_birth', 'gender', 'marital_status', 'nationality', 'religion', 'address']
 
-    form = forms.MyForm
+    # form = forms.MyForm
 
     def get_readonly_fields(self, request, obj):
         if obj is None:  # creating
@@ -154,6 +154,9 @@ class TrainingAdmin(admin.ModelAdmin):
 
 @admin.register(models.PerfromanceEvulation)
 class PeroformanceEvulationAdmin(admin.ModelAdmin):
+
+    form = forms.PerfromanceEvulationForm
+
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         queryset = super().get_queryset(request)
 
@@ -170,14 +173,34 @@ class PeroformanceEvulationAdmin(admin.ModelAdmin):
 # admin.site.register(models.Qualification)
 @admin.register(models.Qualification)
 class QualificationAdmin(admin.ModelAdmin):
+
+    form = forms.QualificationForm
+
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         queryset = super().get_queryset(request)
 
         # Check if the user is a staff
-        if hasattr(request.user, "staff"):
+        if hasattr(request.user, "staff") and request.user.staff.teaching_type != 'HOD':
             queryset = queryset.filter(staff=request.user.staff)
 
         return queryset
+
+    def get_exclude(self, request, obj):
+
+        if hasattr(request.user, 'staff') and request.user.staff.teaching_type != "HOD":
+            return ['staff']
+        return []
+
+    def has_add_permission(self, request):
+        if super().has_add_permission(request):
+            if hasattr(request.user, 'staff') and request.user.staff.teaching_type != "HOD":
+                return True
+        return False
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.staff = request.user.staff
+        return super().save_model(request, obj, form, change)
 
 
 admin.site.register(models.Degree)
